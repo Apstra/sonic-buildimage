@@ -58,11 +58,7 @@ sonic_get_version() {
         local dirty="-dirty-$BUILD_TIMESTAMP"
     fi
     BUILD_NUMBER=${BUILD_NUMBER:-0}
-    ## Check if we are on tagged commit
-    ## Note: escape the version string by sed: / -> _
-    if [ -n "$latest_tag" ] && [ "$describe" == "$latest_tag" ]; then
-        echo "${latest_tag}${dirty}" | sed 's/\//_/g'
-    else
-        echo "${branch_name}.${BUILD_NUMBER}${dirty:--$(git rev-parse --short HEAD)}" | sed 's/\//_/g'
-    fi
+    # Apstra specific versioning
+    CONFIGURED_PLATFORM=$([ -f .platform ] && cat .platform || echo generic)
+    echo Apstra_Sonic_${CONFIGURED_PLATFORM}_$(cat AOS_VERSION) | sed 's/\//_/g'
 }
